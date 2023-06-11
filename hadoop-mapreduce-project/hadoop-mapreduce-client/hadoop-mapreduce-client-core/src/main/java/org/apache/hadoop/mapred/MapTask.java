@@ -325,6 +325,10 @@ public class MapTask extends Task {
         sortPhase  = getProgress().addPhase("sort", 0.333f);
       }
     }
+    //根据TaskUmbilicalProtocol 协议开启两个线程  处理与父进程的通信
+    // 1. TaskReporter 任务报告线程
+    // 2. pingThread  通信线程
+    // 3 diskLimitCheckThread 如果需要 开启磁盘界限检测线程
     TaskReporter reporter = startReporter(umbilical);
  
     boolean useNewApi = job.getUseNewMapper();

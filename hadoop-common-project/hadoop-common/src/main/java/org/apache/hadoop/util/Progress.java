@@ -48,6 +48,7 @@ public class Progress {
   // fixed weightage for all phases.
   private boolean fixedWeightageForAllPhases = false;
   private float progressPerPhase = 0.0f;
+  //当前阶段的进度
   private ArrayList<Float> progressWeightagesForPhases = new ArrayList<Float>();
   
   /** Creates a new root node. */

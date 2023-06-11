@@ -54,7 +54,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * RPC Engine for for protobuf based RPCs.
+ * RPC Engine(主机) for for protobuf based RPCs.
  */
 @InterfaceStability.Evolving
 public class ProtobufRpcEngine2 implements RpcEngine {

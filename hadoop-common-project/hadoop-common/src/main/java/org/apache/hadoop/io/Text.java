@@ -53,24 +53,14 @@ public class Text extends BinaryComparable
     implements WritableComparable<BinaryComparable> {
 
   private static final ThreadLocal<CharsetEncoder> ENCODER_FACTORY =
-    new ThreadLocal<CharsetEncoder>() {
-      @Override
-      protected CharsetEncoder initialValue() {
-        return StandardCharsets.UTF_8.newEncoder().
-               onMalformedInput(CodingErrorAction.REPORT).
-               onUnmappableCharacter(CodingErrorAction.REPORT);
-    }
-  };
+          ThreadLocal.withInitial(() -> StandardCharsets.UTF_8.newEncoder().
+                 onMalformedInput(CodingErrorAction.REPORT).
+                 onUnmappableCharacter(CodingErrorAction.REPORT));
 
   private static final ThreadLocal<CharsetDecoder> DECODER_FACTORY =
-    new ThreadLocal<CharsetDecoder>() {
-    @Override
-    protected CharsetDecoder initialValue() {
-      return StandardCharsets.UTF_8.newDecoder().
-             onMalformedInput(CodingErrorAction.REPORT).
-             onUnmappableCharacter(CodingErrorAction.REPORT);
-    }
-  };
+          ThreadLocal.withInitial(() -> StandardCharsets.UTF_8.newDecoder().
+                 onMalformedInput(CodingErrorAction.REPORT).
+                 onUnmappableCharacter(CodingErrorAction.REPORT));
 
   // max size of the byte array, seems to be a safe choice for multiple JVMs
   // (see ArrayList.MAX_ARRAY_SIZE)

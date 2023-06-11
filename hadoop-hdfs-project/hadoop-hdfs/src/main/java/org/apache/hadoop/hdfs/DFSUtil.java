@@ -1192,10 +1192,12 @@ public class DFSUtil {
     if (nameserviceId != null) {
       return nameserviceId;
     }
+    //dfs.nameservices
     Collection<String> nsIds = DFSUtilClient.getNameServiceIds(conf);
     if (1 == nsIds.size()) {
       return nsIds.toArray(new String[1])[0];
     }
+    //dfs.ha.namenode.id
     String nnId = conf.get(DFS_HA_NAMENODE_ID_KEY);
     
     return getSuffixIDs(conf, addressKey, null, nnId, LOCAL_ADDRESS_MATCHER)[0];

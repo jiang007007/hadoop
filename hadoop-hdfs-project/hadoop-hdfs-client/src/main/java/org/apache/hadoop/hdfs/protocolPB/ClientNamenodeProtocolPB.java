@@ -36,7 +36,7 @@ import org.apache.hadoop.security.token.TokenInfo;
 @ProtocolInfo(protocolName = HdfsConstants.CLIENT_NAMENODE_PROTOCOL_NAME,
     protocolVersion = 1)
 /**
- * Protocol that a clients use to communicate with the NameNode.
+ * Protocol that a clients use to communicate(通信) with the NameNode.
  *
  * Note: This extends the protocolbuffer service based interface to
  * add annotations required for security.

@@ -255,6 +255,7 @@ import static org.apache.hadoop.fs.CommonConfigurationKeys.IPC_BACKOFF_ENABLE_DE
 public class NameNode extends ReconfigurableBase implements
     NameNodeStatusMXBean, TokenVerifier<DelegationTokenIdentifier> {
   static{
+    //加载分布式配置
     HdfsConfiguration.init();
   }
 
@@ -1112,7 +1113,9 @@ public class NameNode extends ReconfigurableBase implements
         conf(TraceUtils.wrapHadoopConf(NAMENODE_HTRACE_PREFIX, conf)).
         build();
     this.role = role;
+    //获取配置中的 nameservices
     String nsId = getNameServiceId(conf);
+    //通过nameservices 获取配置中namenodeId
     String namenodeId = HAUtil.getNameNodeId(conf, nsId);
     clientNamenodeAddress = NameNodeUtils.getClientNamenodeAddress(
         conf, nsId);
@@ -1122,11 +1125,13 @@ public class NameNode extends ReconfigurableBase implements
           + " this namenode/service.", clientNamenodeAddress);
     }
     this.haEnabled = HAUtil.isHAEnabled(conf, nsId);
+   //设置状态为活跃状态
     state = createHAState(getStartupOption(conf));
     this.allowStaleStandbyReads = HAUtil.shouldAllowStandbyReads(conf);
     this.haContext = createHAContext();
     try {
       initializeGenericKeys(conf, nsId, namenodeId);
+      //创建RPC服务
       initialize(getConf());
       state.prepareToEnterState(haContext);
       try {
@@ -1752,6 +1757,7 @@ public class NameNode extends ReconfigurableBase implements
   }
 
   private static void setStartupOption(Configuration conf, StartupOption opt) {
+    //dfs.namenode.startup
     conf.set(DFS_NAMENODE_STARTUP_KEY, opt.name());
   }
 
@@ -1818,6 +1824,7 @@ public class NameNode extends ReconfigurableBase implements
       throws IOException {
     LOG.info("createNameNode " + Arrays.asList(argv));
     if (conf == null)
+      //初始化配置
       conf = new HdfsConfiguration();
     // Parse out some generic args into Configuration.
     GenericOptionsParser hParser = new GenericOptionsParser(conf, argv);
@@ -1828,6 +1835,7 @@ public class NameNode extends ReconfigurableBase implements
       printUsage(System.err);
       return null;
     }
+    //启动参数设置到Configuration
     setStartupOption(conf, startOpt);
 
     boolean aborted = false;
@@ -1940,7 +1948,9 @@ public class NameNode extends ReconfigurableBase implements
     }
 
     try {
+      //日志输出
       StringUtils.startupShutdownMessage(NameNode.class, argv, LOG);
+      //创建NameNode
       NameNode namenode = createNameNode(argv, null);
       if (namenode != null) {
         namenode.join();
@@ -2123,7 +2133,7 @@ public class NameNode extends ReconfigurableBase implements
   }
   
   /**
-   * Class used to expose {@link NameNode} as context to {@link HAState}
+   * Class used to expose(暴露) {@link NameNode} as context to {@link HAState}
    */
   protected class NameNodeHAContext implements HAContext {
     @Override
